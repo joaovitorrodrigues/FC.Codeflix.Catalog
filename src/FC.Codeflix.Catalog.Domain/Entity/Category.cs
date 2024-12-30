@@ -1,4 +1,6 @@
-﻿namespace FC.Codeflix.Catalog.Domain.Entity
+﻿using FC.Codeflix.Catalog.Domain.Exceptions;
+
+namespace FC.Codeflix.Catalog.Domain.Entity
 {
     public class Category
     {
@@ -14,7 +16,44 @@
             Name = name;
             Description = description;
             IsActive = isActive;
-            CreatedAt = DateTime.Now;   
+            CreatedAt = DateTime.Now;
+
+            Validate();
         }
+        public void Activate()
+        {
+            IsActive = true;
+            Validate();
+        }
+
+        public void Deactivate()
+        {
+            IsActive = false;
+            Validate();
+        }
+
+        public void Update(string name, string? description = null)
+        {
+            Name = name;
+            Description = description ?? Description;
+
+            Validate();
+        }
+        private void Validate()
+        {
+            if (string.IsNullOrWhiteSpace(Name)) 
+                throw new EntityValidationException($"{nameof(Name)} shouldn't be empty or null");
+            if (Name.Length < 3) 
+                throw new EntityValidationException($"{nameof(Name)} should be at least 3 characters");
+            if(Name.Length > 255)
+                throw new EntityValidationException($"{nameof(Name)} should be less or equal 255 characters long");
+            if (Description == null) 
+                throw new EntityValidationException($"{nameof(Description)} shouldn't be empty or null");
+            if(Description.Length > 10000)
+                throw new EntityValidationException($"{nameof(Description)} should be less or equal 10.000 characters long");
+
+        }
+
+
     }
 }
