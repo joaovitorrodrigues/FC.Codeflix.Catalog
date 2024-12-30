@@ -27,8 +27,8 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
             var dateTimeAfter = DateTime.Now;
 
             category.Should().NotBeNull();
-            category.Name.Should().Be(validData.Name);
-            category.Description.Should().Be(validData.Description);
+            category.Name.Should().Be(validCategory.Name);
+            category.Description.Should().Be(validCategory.Description);
             category.Id.Should().NotBeEmpty();
             category.CreatedAt.Should().NotBeSameDateAs(default);
             (category.CreatedAt > dateTimeBefore).Should().BeTrue();
@@ -44,19 +44,15 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [InlineData(false)]
         public void InstantiateWithIsActive(bool isActive)
         {
-            var validData = new
-            {
-                Name = "category name",
-                Description = "category description",
-            };
+            var validCategory = _categoryTestFixture.GetValidCategory();
             var dateTimeBefore = DateTime.Now;
 
-            var category = new DomainEntity.Category(validData.Name, validData.Description, isActive);
+            var category = new DomainEntity.Category(validCategory.Name, validCategory.Description, isActive);
 
             var dateTimeAfter = DateTime.Now;
             category.Should().NotBeNull();
-            category.Name.Should().Be(validData.Name);
-            category.Description.Should().Be(validData.Description);
+            category.Name.Should().Be(validCategory.Name);
+            category.Description.Should().Be(validCategory.Description);
             category.Id.Should().NotBeEmpty();
             category.CreatedAt.Should().NotBeSameDateAs(default);
             (category.CreatedAt > dateTimeBefore).Should().BeTrue();
@@ -71,7 +67,8 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [InlineData("   ")]
         public void InstantiateErrorWhenNameIsEmpty(string? name)
         {
-            Action action = () => new DomainEntity.Category(name!, "Category Description");
+            var validCategory = _categoryTestFixture.GetValidCategory();
+            Action action = () => new DomainEntity.Category(name!, validCategory.Description);
 
             action.Should()
                 .Throw<EntityValidationException>()
@@ -83,7 +80,9 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [Trait("Domain", "Category - Aggregates")]
         public void InstantiateErrorWhenDescriptionIsNull()
         {
-            Action action = () => new DomainEntity.Category("Category Name", null!);
+            var validCategory = _categoryTestFixture.GetValidCategory();
+
+            Action action = () => new DomainEntity.Category(validCategory.Name, null!);
 
             action.Should()
                .Throw<EntityValidationException>()
@@ -99,7 +98,9 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [InlineData("ab")]
         public void InstantiateErrorWhenNameIsLessThan3Characters(string invalidName)
         {
-            Action action = () => new DomainEntity.Category(invalidName, "Category Description");
+            var validCategory = _categoryTestFixture.GetValidCategory();
+
+            Action action = () => new DomainEntity.Category(invalidName, validCategory.Description);
 
             action.Should()
             .Throw<EntityValidationException>()
@@ -111,8 +112,10 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [Trait("Domain", "Category - Aggregates")]
         public void InstantiateErrorWhenNameIsGreaterThan255Characters()
         {
+            var validCategory = _categoryTestFixture.GetValidCategory();
+
             var invalidName = String.Join(null, Enumerable.Range(1, 256).Select(_ => "a").ToArray());
-            Action action = () => new DomainEntity.Category(invalidName, "Category Description");
+            Action action = () => new DomainEntity.Category(invalidName, validCategory.Description);
 
             action.Should()
             .Throw<EntityValidationException>()
@@ -125,7 +128,9 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         public void InstantiateErrorWhenDescriptionIsGreaterThan10_000Characters()
         {
             var invalidDescription = String.Join(null, Enumerable.Range(1, 10001).Select(_ => "a").ToArray());
-            Action action = () => new DomainEntity.Category("Category Name", invalidDescription);
+            var validCategory = _categoryTestFixture.GetValidCategory();
+
+            Action action = () => new DomainEntity.Category(validCategory.Name, invalidDescription);
 
             action.Should()
             .Throw<EntityValidationException>()
@@ -137,13 +142,9 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [Trait("Domain", "Category - Aggregates")]
         public void Activate()
         {
-            var validData = new
-            {
-                Name = "category name",
-                Description = "category description",
-            };
+            var validCategory = _categoryTestFixture.GetValidCategory();
 
-            var category = new DomainEntity.Category(validData.Name, validData.Description, false);
+            var category = new DomainEntity.Category(validCategory.Name, validCategory.Description, false);
 
             category.Activate();
 
@@ -154,13 +155,9 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [Trait("Domain", "Category - Aggregates")]
         public void Deactivate()
         {
-            var validData = new
-            {
-                Name = "category name",
-                Description = "category description",
-            };
+            var validCategory = _categoryTestFixture.GetValidCategory();
 
-            var category = new DomainEntity.Category(validData.Name, validData.Description, true);
+            var category = new DomainEntity.Category(validCategory.Name, validCategory.Description, true);
 
             category.Deactivate();
 
@@ -171,7 +168,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [Trait("Domain", "Category - Aggregates")]
         public void Update()
         {
-            var category = new DomainEntity.Category("Category Name", "Category Description");
+            var category = _categoryTestFixture.GetValidCategory();
 
             var newValues = new { Name = "New Name", Description = "New Description" };
 
@@ -185,7 +182,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [Trait("Domain", "Category - Aggregates")]
         public void UpdateOnlyName()
         {
-            var category = new DomainEntity.Category("Category Name", "Category Description");
+            var category = _categoryTestFixture.GetValidCategory();
             var newValues = new { Name = "New Name" };
             var currentDescription = category.Description;
 
@@ -202,7 +199,8 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [InlineData("   ")]
         public void UpdateErrorWhenNameIsEmpty(string? name)
         {
-            var category = new DomainEntity.Category("Category Name", "Category Description");
+            var category = _categoryTestFixture.GetValidCategory();
+
             Action action = () => category.Update(name!);
 
             action.Should()
@@ -219,7 +217,8 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [InlineData("ab")]
         public void UpdateErrorWhenNameIsLessThan3Characters(string invalidName)
         {
-            var category = new DomainEntity.Category("Category Name", "Category Description");
+            var category = _categoryTestFixture.GetValidCategory();
+
             Action action = () => category.Update(invalidName);
 
             action.Should()
@@ -232,7 +231,8 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [Trait("Domain", "Category - Aggregates")]
         public void UpdateErrorWhenNameIsGreaterThan255Characters()
         {
-            var category = new DomainEntity.Category("Category Name", "Category Description");
+            var category = _categoryTestFixture.GetValidCategory();
+
             var invalidName = String.Join(null, Enumerable.Range(1, 256).Select(_ => "a").ToArray());
             Action action = () => category.Update(invalidName);
 
@@ -247,7 +247,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         [Trait("Domain", "Category - Aggregates")]
         public void UpdateErrorWhenDescriptionIsGreaterThan10_000Characters()
         {
-            var category = new DomainEntity.Category("Category Name", "Category Description");
+            var category = _categoryTestFixture.GetValidCategory();
             var invalidDescription = String.Join(null, Enumerable.Range(1, 10001).Select(_ => "a").ToArray());
             Action action = () => category.Update("Category New Name", invalidDescription);
 
