@@ -1,28 +1,31 @@
-﻿using FC.Codeflix.Catalog.Domain.Entity;
-using FC.Codeflix.Catalog.Domain.Exceptions;
+﻿using FC.Codeflix.Catalog.Domain.Exceptions;
 using DomainEntity = FC.Codeflix.Catalog.Domain.Entity;
 
 namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
 {
+    [Collection(nameof(CategoryTestFixture))]
     public class CategoryTest
     {
+        private readonly CategoryTestFixture _categoryTestFixture;
+
+        public CategoryTest(CategoryTestFixture categoryTestFixture)
+        {
+            _categoryTestFixture = categoryTestFixture;
+        }
+
         [Fact(DisplayName = nameof(Instantiate))]
         [Trait("Domain", "Category - Aggregates")]
         public void Instantiate()
         {
-            var validData = new
-            {
-                Name = "category name",
-                Description = "category description",
-            };
+            var validCategory = _categoryTestFixture.GetValidCategory();
             var dateTimeBefore = DateTime.Now;
 
-            var category = new DomainEntity.Category(validData.Name, validData.Description);
+            var category = new DomainEntity.Category(validCategory.Name, validCategory.Description);
 
             var dateTimeAfter = DateTime.Now;
             Assert.NotNull(category);
-            Assert.Equal(validData.Name, category.Name);
-            Assert.Equal(validData.Description, category.Description);
+            Assert.Equal(validCategory.Name, category.Name);
+            Assert.Equal(validCategory.Description, category.Description);
             Assert.NotEqual(default, category.Id);
             Assert.NotEqual(default, category.CreatedAt);
             Assert.True(category.CreatedAt > dateTimeBefore);
