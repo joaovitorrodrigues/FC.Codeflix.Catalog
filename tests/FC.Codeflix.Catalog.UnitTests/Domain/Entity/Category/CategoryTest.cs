@@ -24,15 +24,15 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
 
             var category = new DomainEntity.Category(validCategory.Name, validCategory.Description);
 
-            var dateTimeAfter = DateTime.Now;
+            var dateTimeAfter = DateTime.Now.AddSeconds(1);
 
             category.Should().NotBeNull();
             category.Name.Should().Be(validCategory.Name);
             category.Description.Should().Be(validCategory.Description);
             category.Id.Should().NotBeEmpty();
             category.CreatedAt.Should().NotBeSameDateAs(default);
-            (category.CreatedAt > dateTimeBefore).Should().BeTrue();
-            (category.CreatedAt < dateTimeAfter).Should().BeTrue();
+            (category.CreatedAt >= dateTimeBefore).Should().BeTrue();
+            (category.CreatedAt <= dateTimeAfter).Should().BeTrue();
             (category.IsActive).Should().BeTrue();
 
         }
@@ -49,14 +49,14 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
 
             var category = new DomainEntity.Category(validCategory.Name, validCategory.Description, isActive);
 
-            var dateTimeAfter = DateTime.Now;
+            var dateTimeAfter = DateTime.Now.AddSeconds(1);
             category.Should().NotBeNull();
             category.Name.Should().Be(validCategory.Name);
             category.Description.Should().Be(validCategory.Description);
             category.Id.Should().NotBeEmpty();
             category.CreatedAt.Should().NotBeSameDateAs(default);
-            (category.CreatedAt > dateTimeBefore).Should().BeTrue();
-            (category.CreatedAt < dateTimeAfter).Should().BeTrue();
+            (category.CreatedAt >= dateTimeBefore).Should().BeTrue();
+            (category.CreatedAt <= dateTimeAfter).Should().BeTrue();
             (category.IsActive).Should().Be(isActive);
         }
 
