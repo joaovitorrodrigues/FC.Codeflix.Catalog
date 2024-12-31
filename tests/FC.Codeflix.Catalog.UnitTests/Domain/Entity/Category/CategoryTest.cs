@@ -170,12 +170,12 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         {
             var category = _categoryTestFixture.GetValidCategory();
 
-            var newValues = new { Name = "New Name", Description = "New Description" };
+            var categoryWithNewValues = _categoryTestFixture.GetValidCategory();
 
-            category.Update(newValues.Name, newValues.Description);
+            category.Update(categoryWithNewValues.Name, categoryWithNewValues.Description);
 
-            category.Name.Should().Be(newValues.Name);
-            category.Description.Should().Be(newValues.Description);
+            category.Name.Should().Be(categoryWithNewValues.Name);
+            category.Description.Should().Be(categoryWithNewValues.Description);
         }
 
         [Fact(DisplayName = nameof(UpdateOnlyName))]
@@ -183,12 +183,12 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         public void UpdateOnlyName()
         {
             var category = _categoryTestFixture.GetValidCategory();
-            var newValues = new { Name = "New Name" };
+            var newName = _categoryTestFixture.GetValidCategoryName();
             var currentDescription = category.Description;
 
-            category.Update(newValues.Name);
+            category.Update(newName);
 
-            category.Name.Should().Be(newValues.Name);
+            category.Name.Should().Be(newName);
             category.Description.Should().Be(currentDescription);
         }
 
@@ -233,7 +233,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         {
             var category = _categoryTestFixture.GetValidCategory();
 
-            var invalidName = String.Join(null, Enumerable.Range(1, 256).Select(_ => "a").ToArray());
+            var invalidName = _categoryTestFixture.Faker.Lorem.Letter(256);
             Action action = () => category.Update(invalidName);
 
             action.Should()
@@ -248,8 +248,14 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
         public void UpdateErrorWhenDescriptionIsGreaterThan10_000Characters()
         {
             var category = _categoryTestFixture.GetValidCategory();
-            var invalidDescription = String.Join(null, Enumerable.Range(1, 10001).Select(_ => "a").ToArray());
-            Action action = () => category.Update("Category New Name", invalidDescription);
+            var newName = _categoryTestFixture.GetValidCategoryName();
+            var invalidDescription = _categoryTestFixture.Faker.Commerce.ProductDescription();
+
+            while(invalidDescription.Length < 10000)
+            {
+                invalidDescription += $" {_categoryTestFixture.Faker.Commerce.ProductDescription()}";
+            }
+            Action action = () => category.Update(newName, invalidDescription);
 
             action.Should()
             .Throw<EntityValidationException>()
