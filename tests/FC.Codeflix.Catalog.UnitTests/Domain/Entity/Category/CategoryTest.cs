@@ -72,7 +72,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
 
             action.Should()
                 .Throw<EntityValidationException>()
-                .WithMessage("Name shouldn't be empty or null");
+                .WithMessage("Name should not be null or empty");
 
         }
 
@@ -86,7 +86,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
 
             action.Should()
                .Throw<EntityValidationException>()
-               .WithMessage("Description shouldn't be empty or null");
+               .WithMessage("Description should not be null");
 
         }
 
@@ -104,7 +104,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
 
             action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Name should be at least 3 characters");
+            .WithMessage("Name should be at least 3 characters long");
 
         }
 
@@ -134,7 +134,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
 
             action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Description should be less or equal 10.000 characters long");
+            .WithMessage("Description should be less or equal 10000 characters long");
 
         }
 
@@ -205,16 +205,13 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
 
             action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Name shouldn't be empty or null");
+            .WithMessage("Name should not be null or empty");
 
         }
 
         [Theory(DisplayName = nameof(UpdateErrorWhenNameIsLessThan3Characters))]
         [Trait("Domain", "Category - Aggregates")]
-        [InlineData("1")]
-        [InlineData("12")]
-        [InlineData("a")]
-        [InlineData("ab")]
+        [MemberData(nameof(GetNamesWithLessThan3Characters), parameters: 10)]
         public void UpdateErrorWhenNameIsLessThan3Characters(string invalidName)
         {
             var category = _categoryTestFixture.GetValidCategory();
@@ -223,8 +220,20 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
 
             action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Name should be at least 3 characters");
+            .WithMessage("Name should be at least 3 characters long");
 
+        }
+
+        public static IEnumerable<object[]> GetNamesWithLessThan3Characters(int numberOfTests = 6)
+        {
+            var fixture = new CategoryTestFixture();
+
+            for(int i = 0; i < numberOfTests; i++)
+            {
+                var isOdd = i % 2 == 1;
+                yield return new object[] { fixture.GetValidCategoryName()[..(isOdd ? 1 : 2)] };
+
+            }
         }
 
         [Fact(DisplayName = nameof(UpdateErrorWhenNameIsGreaterThan255Characters))]
@@ -259,7 +268,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Category
 
             action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Description should be less or equal 10.000 characters long");
+            .WithMessage("Description should be less or equal 10000 characters long");
 
 
 
