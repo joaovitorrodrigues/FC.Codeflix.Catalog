@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{98F2A1D7-F461-4F3D-9D22-34CD88AB081A}"
 EndProject
@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FC.Codeflix.Catalog.UnitTes
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FC.Codeflix.Catalog.Domain", "src\FC.Codeflix.Catalog.Domain\FC.Codeflix.Catalog.Domain.csproj", "{923EE228-1FDC-4EDD-8B74-4EAA63C8D12A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FC.Codeflix.Catalog.Application", "src\FC.Codeflix.Catalog.Application\FC.Codeflix.Catalog.Application.csproj", "{F13F796F-5B33-4AE0-AEFF-7C4508B96864}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,6 +30,10 @@ Global
 		{923EE228-1FDC-4EDD-8B74-4EAA63C8D12A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{923EE228-1FDC-4EDD-8B74-4EAA63C8D12A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{923EE228-1FDC-4EDD-8B74-4EAA63C8D12A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F13F796F-5B33-4AE0-AEFF-7C4508B96864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F13F796F-5B33-4AE0-AEFF-7C4508B96864}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F13F796F-5B33-4AE0-AEFF-7C4508B96864}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F13F796F-5B33-4AE0-AEFF-7C4508B96864}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -35,5 +41,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7C192271-8D99-4FF7-AA89-656FB9F82FF4} = {FB73E352-9D48-4796-BAC0-A1ED91107F5D}
 		{923EE228-1FDC-4EDD-8B74-4EAA63C8D12A} = {98F2A1D7-F461-4F3D-9D22-34CD88AB081A}
+		{F13F796F-5B33-4AE0-AEFF-7C4508B96864} = {98F2A1D7-F461-4F3D-9D22-34CD88AB081A}
 	EndGlobalSection
 EndGlobal
