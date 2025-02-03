@@ -40,10 +40,12 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.CreateCategory
             (output.CreatedAt != default).Should().BeTrue();
         }
 
-        [Theory(DisplayName = nameof(ThrowWhenCantInstantiateAggregateAsync))]
+        [Theory(DisplayName = nameof(ThrowWhenCantInstantiateCategory))]
         [Trait("Application", "CreateCategory - Use Cases")]
-        [MemberData(nameof(GetInvalidInputs))]
-        public async Task ThrowWhenCantInstantiateAggregateAsync(CreateCategoryInput input, string exceptionMessage)
+        [MemberData(nameof(CreateCategoryTestDataGenerator.GetInvalidInputs),
+                    parameters: 24,
+                    MemberType =typeof(CreateCategoryTestDataGenerator))]
+        public async Task ThrowWhenCantInstantiateCategory(CreateCategoryInput input, string exceptionMessage)
         {
             var useCase = new UseCases.CreateCategory(_fixture.GetUnitOfWorkMock().Object, _fixture.GetRepositoryMock().Object);
 
@@ -52,47 +54,6 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.CreateCategory
             await task.Should().ThrowAsync<EntityValidationException>().WithMessage(exceptionMessage);
         }
 
-        public static IEnumerable<object[]> GetInvalidInputs()
-        {
-            var fixture = new CreateCategoryTestFixture();
-            var invalidInputsList = new List<object[]>();
-
-            var invalidInputShortName = fixture.GetInput();
-            invalidInputShortName.Name = invalidInputShortName.Name.Substring(0, 2);
-
-            invalidInputsList.Add(new object[] { invalidInputShortName, "Name should be at least 3 characters long" });
-
-
-
-            var invalidInputTooLongName = fixture.GetInput();
-            invalidInputTooLongName.Name = "";
-            while (invalidInputTooLongName.Name.Length < 255)
-            {
-                invalidInputTooLongName.Name = $"{invalidInputTooLongName.Name} {fixture.Faker.Commerce.ProductName}";
-            }
-
-            invalidInputsList.Add(new object[] { invalidInputTooLongName, "Name should be less or equal 255 characters long" });
-
-
-            var invalidInputDescriptionNull = fixture.GetInput();
-            invalidInputDescriptionNull.Description = null!;
-            invalidInputsList.Add(new object[] { invalidInputDescriptionNull, "Description should not be null" });
-
-
-            var invalidInputTooLongDescription = fixture.GetInput();
-            invalidInputTooLongDescription.Description = "";
-            while (invalidInputTooLongDescription.Description.Length < 10000)
-            {
-                invalidInputTooLongDescription.Description = $"{invalidInputTooLongDescription.Description} {fixture.Faker.Commerce.ProductDescription}";
-            }
-
-            invalidInputsList.Add(new object[] { invalidInputTooLongDescription, "Description should be less or equal 10000 characters long" });
-
-            return invalidInputsList;
-
-
-
-        }
         [Fact(DisplayName = nameof(CreateCategoryWithOnlyName))]
         [Trait("Application", "CreateCategory - Use Cases")]
         public async Task CreateCategoryWithOnlyName()

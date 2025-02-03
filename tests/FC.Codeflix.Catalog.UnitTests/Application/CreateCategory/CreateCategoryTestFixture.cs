@@ -44,8 +44,47 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.CreateCategory
                 GetRandomBoolean()
             );
 
+        public CreateCategoryInput GetInvalidInputShortName()
+        {
+            var invalidInputShortName = GetInput();
+            invalidInputShortName.Name = invalidInputShortName.Name.Substring(0, 2);
+
+            return invalidInputShortName;
+        }
+
+        public CreateCategoryInput GetInvalidInputTooLongName()
+        {
+            var invalidInputTooLongName = GetInput();
+            invalidInputTooLongName.Name = "";
+            while (invalidInputTooLongName.Name.Length < 255)
+            {
+                invalidInputTooLongName.Name = $"{invalidInputTooLongName.Name} {Faker.Commerce.ProductName}";
+            }
+            return invalidInputTooLongName;
+        }
+
+        public CreateCategoryInput GetInvalidInputDescriptionNull()
+        {
+            var invalidInputDescriptionNull = GetInput();
+            invalidInputDescriptionNull.Description = null!;
+            return invalidInputDescriptionNull;
+        }
+
+        public CreateCategoryInput GetInvalidInputTooLongDescription()
+        {
+            var invalidInputTooLongDescription = GetInput();
+            invalidInputTooLongDescription.Description = "";
+            while (invalidInputTooLongDescription.Description.Length < 10000)
+            {
+                invalidInputTooLongDescription.Description = $"{invalidInputTooLongDescription.Description} {Faker.Commerce.ProductDescription}";
+            }
+
+            return invalidInputTooLongDescription;
+
+        }
 
         public Mock<ICategoryRepository> GetRepositoryMock() => new();
         public Mock<IUnitOfWork> GetUnitOfWorkMock() => new();
+
     }
 }
