@@ -1,8 +1,8 @@
 ﻿using DomainEntity = FC.Codeflix.Catalog.Domain.Entity;
 
-namespace FC.Codeflix.Catalog.Application.UseCases.GetCategory
+namespace FC.Codeflix.Catalog.Application.UseCases.Category.Common
 {
-    public class GetCategoryOutput
+    public class CategoryModelOutput
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -10,7 +10,7 @@ namespace FC.Codeflix.Catalog.Application.UseCases.GetCategory
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public GetCategoryOutput(Guid id, string name, string description, DateTime createdAt, bool isActive = true)
+        public CategoryModelOutput(Guid id, string name, string description, DateTime createdAt, bool isActive = true)
         {
             Id = id;
             Name = name;
@@ -19,15 +19,13 @@ namespace FC.Codeflix.Catalog.Application.UseCases.GetCategory
             IsActive = isActive;
         }
 
-        public static GetCategoryOutput FromCategory(DomainEntity.Category category)
-        => new(
+        public static CategoryModelOutput FromCategory(DomainEntity.Category category)
+            => new(
                 category.Id,
                 category.Name,
                 category.Description,
                 category.CreatedAt,
                 category.IsActive
             );
-
-
     }
 }

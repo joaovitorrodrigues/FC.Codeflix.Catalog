@@ -1,7 +1,7 @@
-﻿using FC.Codeflix.Catalog.Application.UseCases.GetCategory;
+﻿using FC.Codeflix.Catalog.Application.UseCases.Category.GetCategory;
 using FluentAssertions;
 using Moq;
-using UseCase = FC.Codeflix.Catalog.Application.UseCases.GetCategory;
+using UseCase = FC.Codeflix.Catalog.Application.UseCases.Category.GetCategory;
 
 namespace FC.Codeflix.Catalog.UnitTests.Application.GetCategory
 {
