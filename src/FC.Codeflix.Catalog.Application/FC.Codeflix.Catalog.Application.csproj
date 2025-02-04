@@ -14,4 +14,8 @@
     <ProjectReference Include="..\FC.Codeflix.Catalog.Domain\FC.Codeflix.Catalog.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\Category\DeleteCategory\" />
+  </ItemGroup>
+
 </Project>
