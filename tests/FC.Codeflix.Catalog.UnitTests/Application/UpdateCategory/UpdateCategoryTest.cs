@@ -25,7 +25,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory
 
             repositoryMock.Setup(x => x.Get(exampleCategory.Id, It.IsAny<CancellationToken>())).ReturnsAsync(exampleCategory);
 
-            var input = UseCases.UpdateCategoryInput
+            var input = new UseCases.UpdateCategoryInput
             (
                 exampleCategory.Id,
                 _fixture.GetValidCategoryName(),
@@ -35,7 +35,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory
 
             var useCase = new UseCases.UpdateCategory(repositoryMock.Object, unitOfWorkMock.Object);
 
-            CategoryModelOutput output = await useCase.Handle(input);
+            CategoryModelOutput output = await useCase.Handle(input, CancellationToken.None);
 
             output.Should().NotBeNull();
             output.Name.Should().Be(input.Name);
