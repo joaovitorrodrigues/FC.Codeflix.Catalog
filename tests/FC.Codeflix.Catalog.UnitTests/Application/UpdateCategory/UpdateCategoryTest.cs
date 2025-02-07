@@ -2,6 +2,7 @@
 using FC.Codeflix.Catalog.Application.UseCases.Category.Common;
 using FC.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 using FC.Codeflix.Catalog.Domain.Entity;
+using FC.Codeflix.Catalog.Domain.Exceptions;
 using FluentAssertions;
 using Moq;
 using UseCases = FC.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
@@ -108,7 +109,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory
         nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate),
         parameters: 10,
         MemberType = typeof(UpdateCategoryTestDataGenerator)
-    )]
+        )]
         public async Task UpdateCategoryOnlyName(Category exampleCategory, UpdateCategoryInput exampleInput)
         {
             var repositoryMock = _fixture.GetRepositoryMock();
@@ -132,6 +133,30 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory
 
             unitOfWorkMock.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Once);
 
+        }
+
+        [Theory(DisplayName =nameof(ThrowWhenCantUpdateCategory))]
+        [Trait("Application", "UpdateCategory - Use Cases")]
+        [MemberData(nameof(UpdateCategoryTestDataGenerator.GetInvalidInputs),
+            parameters: 12,
+            MemberType = typeof(UpdateCategoryTestDataGenerator))]
+        public async Task ThrowWhenCantUpdateCategory(UpdateCategoryInput input, string expectedExceptionMessage)
+        {            
+            var repositoryMock = _fixture.GetRepositoryMock();
+            var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+            var exampleCategory = _fixture.GetValidCategory();
+            input.Id = exampleCategory.Id;
+
+            repositoryMock.Setup(x => x.Get(exampleCategory.Id, It.IsAny<CancellationToken>())).ReturnsAsync(exampleCategory);
+
+
+            var useCase = new UseCases.UpdateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+
+            var task = async () => await useCase.Handle(input, CancellationToken.None);
+
+            await task.Should().ThrowAsync<EntityValidationException>().WithMessage(expectedExceptionMessage);
+
+            repositoryMock.Verify(x => x.Get(input.Id, It.IsAny<CancellationToken>()), Times.Once);
         }
 
     }
