@@ -1,6 +1,7 @@
 ﻿using FC.Codeflix.Catalog.Domain.Entity;
 using Moq;
 using FluentAssertions;
+using FC.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 
 namespace FC.Codeflix.Catalog.UnitTests.Application.ListCategories
 {
@@ -26,7 +27,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.ListCategories
                 dir: SearchOrder.Asc
             );
 
-            var outputRepositorySearch = new OutputSearch<Category>(
+            var outputRepositorySearch = new SearchOutput<Category>(
                 currentPage: input.page,
                 perPage: input.perPage,
                 Items: (IReadOnlyList<Category>)categoriesExampleList,
