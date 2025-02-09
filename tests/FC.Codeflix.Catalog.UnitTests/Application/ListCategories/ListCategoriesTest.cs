@@ -2,6 +2,8 @@
 using Moq;
 using FluentAssertions;
 using FC.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
+using UseCases = FC.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
+using FC.Codeflix.Catalog.Application.UseCases.Category.Common;
 
 namespace FC.Codeflix.Catalog.UnitTests.Application.ListCategories
 {
@@ -19,7 +21,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.ListCategories
         {
             var categoriesExampleList = _fixture.GetCategoriesList();
             var repositoryMock = _fixture.GetRepositoryMock();
-            var input = new ListCategoriesInput(
+            var input = new UseCases.ListCategoriesInput(
                 page: 2,
                 perPage: 15,
                 search: "search-example",
@@ -28,40 +30,40 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.ListCategories
             );
 
             var outputRepositorySearch = new SearchOutput<Category>(
-                currentPage: input.page,
-                perPage: input.perPage,
-                Items: (IReadOnlyList<Category>)categoriesExampleList,
+                currentPage: input.Page,
+                perPage: input.PerPage,
+                items: categoriesExampleList,
                 total: 70
             );
-            repositoryMock.Setup(x => x.Search(It.Is<SearchInput>(
-                searchInput.Page == input.page
+            repositoryMock.Setup(x => x.Search(It.Is<SearchInput>( searchInput =>
+                searchInput.Page == input.Page
                 && searchInput.PerPage == input.PerPage
                 && searchInput.Search == input.Search
                 && searchInput.OrderBy == input.Sort
                 && searchInput.Order == input.Dir), It.IsAny<CancellationToken>()
             )).ReturnsAsync(outputRepositorySearch);
 
-            var useCase = new ListCategories(repositoryMock.Object);
+            var useCase = new UseCases.ListCategories(repositoryMock.Object);
 
             var output = await useCase.Handle(input, CancellationToken.None);
 
             output.Should().NotBeNull();
-            output.Page.Should().Be(outputRepositorySearch.CurrentPage);
+            output.CurrentPage.Should().Be(outputRepositorySearch.CurrentPage);
             output.PerPage.Should().Be(outputRepositorySearch.PerPage);
             output.Total.Should().Be(outputRepositorySearch.Total);
             output.Items.Should().HaveCount(outputRepositorySearch.Items.Count);
-            output.Items.Foreach(outputItem => 
+            ((List<CategoryModelOutput>)output.Items).ForEach(outputItem => 
             {
-                var repositoryCategory = outputRepositorySearch.Items.Find(x => x.Id == outputItem.Id);
+                var repositoryCategory = outputRepositorySearch.Items.FirstOrDefault(x => x.Id == outputItem.Id);
                 outputItem.Should().NotBeNull();
-                outputItem.Name.Should().Be(repositoryCategory.Name);
-                outputItem.Description.Should().Be(repositoryCategory.Description);
-                outputItem.IsActive.Should().Be(repositoryCategory.IsActive);                
+                outputItem.Name.Should().Be(repositoryCategory!.Name);
+                outputItem.Description.Should().Be(repositoryCategory!.Description);
+                outputItem.IsActive.Should().Be(repositoryCategory!.IsActive);                
                 (outputItem.CreatedAt != default).Should().BeTrue();
             });
 
-            repositoryMock.Verify(x => x.Search(It.Is<SearchInput>(
-                searchInput.Page == input.page
+            repositoryMock.Verify(x => x.Search(It.Is<SearchInput>(searchInput =>
+                searchInput.Page == input.Page
                 && searchInput.PerPage == input.PerPage
                 && searchInput.Search == input.Search
                 && searchInput.OrderBy == input.Sort
