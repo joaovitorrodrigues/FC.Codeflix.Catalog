@@ -1,4 +1,5 @@
 ﻿using FC.Codeflix.Catalog.Domain.Entity;
+using FC.Codeflix.Catalog.Infra.Data.EF;
 using FC.Codeflix.Catalog.IntegrationTests.Base;
 using Microsoft.EntityFrameworkCore;
 

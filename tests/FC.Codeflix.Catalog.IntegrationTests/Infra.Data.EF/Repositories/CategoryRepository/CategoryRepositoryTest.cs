@@ -1,4 +1,7 @@
-﻿namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.CategoryRepository
+﻿using FC.Codeflix.Catalog.Infra.Data.EF;
+using FluentAssertions;
+using Repository = FC.Codeflix.Catalog.Infra.Data.EF.Repositories;
+namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.CategoryRepository
 {
     [Collection(nameof(CategoryRepositoryTestFixture))]
     public class CategoryRepositoryTest
@@ -16,12 +19,12 @@
         {
             CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
             var exampleCategory = _fixture.GetExampleCategory();
-            var categoryRepository = new CategoryRepository(dbContext);
+            var categoryRepository = new Repository.CategoryRepository(dbContext);
 
             await categoryRepository.Insert(exampleCategory, CancellationToken.None);
             await dbContext.SaveChangesAsync();
 
-            var dbCategory = await dbContext.Categories.Find(exampleCategory.Id);
+            var dbCategory = await dbContext.Categories.FindAsync(exampleCategory.Id);
 
             dbCategory.Should().NotBeNull();
             dbCategory.Name.Should().Be(exampleCategory.Name);
