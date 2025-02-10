@@ -3,7 +3,7 @@ using FluentAssertions;
 using UseCases = FC.Codeflix.Catalog.Application.UseCases.Category.DeleteCategory;
 using FC.Codeflix.Catalog.Application.Exceptions;
 
-namespace FC.Codeflix.Catalog.UnitTests.Application.DeleteCategory
+namespace FC.Codeflix.Catalog.UnitTests.Application.Category.DeleteCategory
 {
     [Collection(nameof(DeleteCategoryTestFixture))]
     public class DeleteCategoryTest
@@ -51,7 +51,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.DeleteCategory
 
             var task = async () => await useCase.Handle(input, CancellationToken.None);
 
-            await task.Should().ThrowAsync<NotFoundException>();         
+            await task.Should().ThrowAsync<NotFoundException>();
 
         }
 

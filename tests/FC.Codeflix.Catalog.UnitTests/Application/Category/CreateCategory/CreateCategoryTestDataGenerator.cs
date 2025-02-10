@@ -1,4 +1,6 @@
-﻿namespace FC.Codeflix.Catalog.UnitTests.Application.CreateCategory
+﻿using FC.Codeflix.Catalog.UnitTests.Application.Category.CreateCategory;
+
+namespace FC.Codeflix.Catalog.UnitTests.Application.Category.CreateCategory
 {
     public class CreateCategoryTestDataGenerator
     {

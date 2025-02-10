@@ -1,11 +1,11 @@
 ﻿using FC.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
-using FC.Codeflix.Catalog.Domain.Entity;
+using Entity = FC.Codeflix.Catalog.Domain.Entity;
 using FC.Codeflix.Catalog.Domain.Exceptions;
 using FluentAssertions;
 using Moq;
 using UseCases = FC.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 
-namespace FC.Codeflix.Catalog.UnitTests.Application.CreateCategory
+namespace FC.Codeflix.Catalog.UnitTests.Application.Category.CreateCategory
 {
     [Collection(nameof(CreateCategoryTestFixture))]
     public class CreateCategoryTest
@@ -28,7 +28,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.CreateCategory
 
             var output = await useCase.Handle(input, CancellationToken.None);
 
-            repositoryMock.Verify(repository => repository.Insert(It.IsAny<Category>(), It.IsAny<CancellationToken>()), Times.Once);
+            repositoryMock.Verify(repository => repository.Insert(It.IsAny<Entity.Category>(), It.IsAny<CancellationToken>()), Times.Once);
 
             unitOfWorkMock.Verify(unitOfWork => unitOfWork.Commit(It.IsAny<CancellationToken>()), Times.Once);
 
@@ -44,7 +44,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.CreateCategory
         [Trait("Application", "CreateCategory - Use Cases")]
         [MemberData(nameof(CreateCategoryTestDataGenerator.GetInvalidInputs),
                     parameters: 24,
-                    MemberType =typeof(CreateCategoryTestDataGenerator))]
+                    MemberType = typeof(CreateCategoryTestDataGenerator))]
         public async Task ThrowWhenCantInstantiateCategory(CreateCategoryInput input, string exceptionMessage)
         {
             var useCase = new UseCases.CreateCategory(_fixture.GetUnitOfWorkMock().Object, _fixture.GetRepositoryMock().Object);
@@ -66,7 +66,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.CreateCategory
 
             var output = await useCase.Handle(input, CancellationToken.None);
 
-            repositoryMock.Verify(repository => repository.Insert(It.IsAny<Category>(), It.IsAny<CancellationToken>()), Times.Once);
+            repositoryMock.Verify(repository => repository.Insert(It.IsAny<Entity.Category>(), It.IsAny<CancellationToken>()), Times.Once);
 
             unitOfWorkMock.Verify(unitOfWork => unitOfWork.Commit(It.IsAny<CancellationToken>()), Times.Once);
 
@@ -90,7 +90,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.CreateCategory
 
             var output = await useCase.Handle(input, CancellationToken.None);
 
-            repositoryMock.Verify(repository => repository.Insert(It.IsAny<Category>(), It.IsAny<CancellationToken>()), Times.Once);
+            repositoryMock.Verify(repository => repository.Insert(It.IsAny<Entity.Category>(), It.IsAny<CancellationToken>()), Times.Once);
 
             unitOfWorkMock.Verify(unitOfWork => unitOfWork.Commit(It.IsAny<CancellationToken>()), Times.Once);
 

@@ -1,12 +1,12 @@
 ﻿using FC.Codeflix.Catalog.Application.Exceptions;
 using FC.Codeflix.Catalog.Application.UseCases.Category.Common;
 using FC.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
-using FC.Codeflix.Catalog.Domain.Entity;
+using Entity = FC.Codeflix.Catalog.Domain.Entity;
 using FC.Codeflix.Catalog.Domain.Exceptions;
 using FluentAssertions;
 using Moq;
 using UseCases = FC.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
-namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory
+namespace FC.Codeflix.Catalog.UnitTests.Application.Category.UpdateCategory
 {
     [Collection(nameof(UpdateCategoryTestFixture))]
     public class UpdateCategoryTest
@@ -18,14 +18,14 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory
             _fixture = fixture;
         }
 
-        [Theory(DisplayName =nameof(UpdateCategory))]
+        [Theory(DisplayName = nameof(UpdateCategory))]
         [Trait("Application", "UpdateCategory - Use Cases")]
         [MemberData(
-            nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), 
-            parameters: 10, 
+            nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate),
+            parameters: 10,
             MemberType = typeof(UpdateCategoryTestDataGenerator)
         )]
-        public async Task UpdateCategory(Category exampleCategory, UpdateCategoryInput exampleInput)
+        public async Task UpdateCategory(Entity.Category exampleCategory, UpdateCategoryInput exampleInput)
         {
             var repositoryMock = _fixture.GetRepositoryMock();
             var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
@@ -51,7 +51,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory
         }
 
         [Fact(DisplayName = nameof(ThrowWhenCategoryNotFound))]
-        [Trait("Application","UpdateCategory - Use Cases")]
+        [Trait("Application", "UpdateCategory - Use Cases")]
         public async Task ThrowWhenCategoryNotFound()
         {
             var repositoryMock = _fixture.GetRepositoryMock();
@@ -78,7 +78,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory
          parameters: 10,
          MemberType = typeof(UpdateCategoryTestDataGenerator)
      )]
-        public async Task UpdateCategoryWithoutProvidingIsActive(Category exampleCategory, UpdateCategoryInput exampleInput)
+        public async Task UpdateCategoryWithoutProvidingIsActive(Entity.Category exampleCategory, UpdateCategoryInput exampleInput)
         {
             var repositoryMock = _fixture.GetRepositoryMock();
             var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
@@ -110,7 +110,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory
         parameters: 10,
         MemberType = typeof(UpdateCategoryTestDataGenerator)
         )]
-        public async Task UpdateCategoryOnlyName(Category exampleCategory, UpdateCategoryInput exampleInput)
+        public async Task UpdateCategoryOnlyName(Entity.Category exampleCategory, UpdateCategoryInput exampleInput)
         {
             var repositoryMock = _fixture.GetRepositoryMock();
             var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
@@ -135,13 +135,13 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory
 
         }
 
-        [Theory(DisplayName =nameof(ThrowWhenCantUpdateCategory))]
+        [Theory(DisplayName = nameof(ThrowWhenCantUpdateCategory))]
         [Trait("Application", "UpdateCategory - Use Cases")]
         [MemberData(nameof(UpdateCategoryTestDataGenerator.GetInvalidInputs),
             parameters: 12,
             MemberType = typeof(UpdateCategoryTestDataGenerator))]
         public async Task ThrowWhenCantUpdateCategory(UpdateCategoryInput input, string expectedExceptionMessage)
-        {            
+        {
             var repositoryMock = _fixture.GetRepositoryMock();
             var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
             var exampleCategory = _fixture.GetValidCategory();

@@ -1,7 +1,7 @@
 ﻿using FC.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 using FluentAssertions;
 
-namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory
+namespace FC.Codeflix.Catalog.UnitTests.Application.Category.UpdateCategory
 {
     [Collection(nameof(UpdateCategoryTestFixture))]
     public class UpdateCategoryInputValidatorTest
@@ -13,10 +13,10 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory
             _fixture = fixture;
         }
 
-        [Fact(DisplayName =nameof(DontValidateWhenEmptyGuid))]
+        [Fact(DisplayName = nameof(DontValidateWhenEmptyGuid))]
         [Trait("Application", "UpdateCategoryInputValidator - Use Cases")]
         public void DontValidateWhenEmptyGuid()
-        {            
+        {
             var input = _fixture.GetValidInput(Guid.Empty);
 
             var validator = new UpdateCategoryInputValidator();
