@@ -50,7 +50,7 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.Catego
 
             var categoryRepository = new Repository.CategoryRepository(dbContext);
 
-            var dbCategory = await categoryRepository.Get(exampleCategory.Id,CancellationToken.None);
+            var dbCategory = await categoryRepository.Get(exampleCategory.Id, CancellationToken.None);
 
             dbCategory.Should().NotBeNull();
             dbCategory.Name.Should().Be(exampleCategory.Name);
@@ -75,6 +75,34 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.Catego
             var task = async () => await categoryRepository.Get(exampleId, CancellationToken.None);
 
             await task.Should().ThrowAsync<NotFoundException>().WithMessage($"Category '{exampleId}' not found.");
+
+        }
+
+        [Fact(DisplayName = nameof(Update))]
+        [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+        public async Task Update()
+        {
+            CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+            var exampleCategory = _fixture.GetExampleCategory();
+            var newCategoryValues = _fixture.GetExampleCategory();
+
+            await dbContext.AddAsync(exampleCategory);
+            await dbContext.SaveChangesAsync(CancellationToken.None);
+
+            var categoryRepository = new Repository.CategoryRepository(dbContext);
+
+            exampleCategory.Update(newCategoryValues.Name, newCategoryValues.Description);
+            await categoryRepository.Update(exampleCategory, CancellationToken.None);
+            await dbContext.SaveChangesAsync();
+
+            var dbCategory = await categoryRepository.Get(exampleCategory.Id, CancellationToken.None);
+            
+            dbCategory.Should().NotBeNull();
+            dbCategory.Name.Should().Be(newCategoryValues.Name);
+            dbCategory.Description.Should().Be(newCategoryValues.Description);
+            dbCategory.Id.Should().Be(exampleCategory.Id);
+            dbCategory.IsActive.Should().Be(exampleCategory.IsActive);
+            dbCategory.CreatedAt.Should().Be(exampleCategory.CreatedAt);
 
         }
     }
