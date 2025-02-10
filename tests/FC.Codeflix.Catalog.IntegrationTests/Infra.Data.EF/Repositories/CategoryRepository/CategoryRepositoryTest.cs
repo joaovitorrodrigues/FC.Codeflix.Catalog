@@ -34,5 +34,30 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.Catego
             dbCategory.CreatedAt.Should().Be(exampleCategory.CreatedAt);
 
         }
+
+        [Fact(DisplayName = nameof(Get))]
+        [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+        public async Task Get()
+        {
+            CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+            var exampleCategory = _fixture.GetExampleCategory();
+            var exampleCategoriesList = _fixture.GetExampleCategoriesList();
+
+            exampleCategoriesList.Add(exampleCategory);
+            await dbContext.AddRangeAsync(exampleCategoriesList);
+            await dbContext.SaveChangesAsync(CancellationToken.None);
+
+            var categoryRepository = new Repository.CategoryRepository(dbContext);
+
+            var dbCategory = await categoryRepository.Get(exampleCategory.Id,CancellationToken.None);
+
+            dbCategory.Should().NotBeNull();
+            dbCategory.Name.Should().Be(exampleCategory.Name);
+            dbCategory.Description.Should().Be(exampleCategory.Description);
+            dbCategory.Id.Should().Be(exampleCategory.Id);
+            dbCategory.IsActive.Should().Be(exampleCategory.IsActive);
+            dbCategory.CreatedAt.Should().Be(exampleCategory.CreatedAt);
+
+        }
     }
 }
