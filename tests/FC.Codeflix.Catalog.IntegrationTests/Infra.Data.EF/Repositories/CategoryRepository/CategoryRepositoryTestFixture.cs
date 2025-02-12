@@ -38,13 +38,15 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.Catego
         public List<Category> GetExampleCategoriesList(int length = 10) 
         => Enumerable.Range(1, length).Select(_ => GetExampleCategory()).ToList();
 
-        public CodeflixCatalogDbContext CreateDbContext()
+        public CodeflixCatalogDbContext CreateDbContext(bool preserveData = false)
         {
             var dbContext = new CodeflixCatalogDbContext(
                     new DbContextOptionsBuilder<CodeflixCatalogDbContext>().UseInMemoryDatabase("integration-tests-db")
                     .Options
                 );
 
+            if(preserveData == false)
+                dbContext.Database.EnsureDeleted();
             return dbContext;
         }
     }
