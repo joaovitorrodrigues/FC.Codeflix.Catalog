@@ -30,8 +30,13 @@ namespace FC.Codeflix.Catalog.Infra.Data.EF.Repositories
 
         public async Task<SearchOutput<Category>> Search(SearchInput input, CancellationToken cancellationToken)
         {
+            var toSKip = (input.Page - 1) * input.PerPage;
+
             var total = await _categories.CountAsync();
-            var items = await _categories.ToListAsync();
+            var items = await _categories.AsNoTracking()
+                .Skip(toSKip)
+                .Take(input.PerPage)
+                .ToListAsync();
 
             return new(input.Page,input.PerPage, total, items);
         }
