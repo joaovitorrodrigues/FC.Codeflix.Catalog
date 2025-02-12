@@ -35,8 +35,16 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.Catego
         public bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
 
         public Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
-        public List<Category> GetExampleCategoriesList(int length = 10) 
+        public List<Category> GetExampleCategoriesList(int length = 10)
         => Enumerable.Range(1, length).Select(_ => GetExampleCategory()).ToList();
+
+        public List<Category> GetExampleCategoriesListWithNames(List<string> names)
+            => names.Select(name =>
+            {
+                var category = GetExampleCategory();
+                category.Update(name);
+                return category;
+            }).ToList();
 
         public CodeflixCatalogDbContext CreateDbContext(bool preserveData = false)
         {
@@ -45,7 +53,7 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.Catego
                     .Options
                 );
 
-            if(preserveData == false)
+            if (preserveData == false)
                 dbContext.Database.EnsureDeleted();
             return dbContext;
         }

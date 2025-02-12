@@ -32,11 +32,15 @@ namespace FC.Codeflix.Catalog.Infra.Data.EF.Repositories
         {
             var toSKip = (input.Page - 1) * input.PerPage;
 
-            var total = await _categories.CountAsync();
-            var items = await _categories.AsNoTracking()
-                .Skip(toSKip)
+            var query = _categories.AsNoTracking();
+            if (!string.IsNullOrWhiteSpace(input.Search))
+                query = query.Where(x => x.Name.Contains(input.Search));
+
+            var total = await query.CountAsync();
+            var items = await query.AsNoTracking().Skip(toSKip)
                 .Take(input.PerPage)
                 .ToListAsync();
+
 
             return new(input.Page,input.PerPage, total, items);
         }
