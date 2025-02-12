@@ -98,7 +98,7 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.Catego
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
             var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(exampleCategory.Id);
-            
+
             dbCategory.Should().NotBeNull();
             dbCategory.Name.Should().Be(exampleCategory.Name);
             dbCategory.Description.Should().Be(exampleCategory.Description);
@@ -120,7 +120,7 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.Catego
             await dbContext.AddRangeAsync(exampleCategoriesList);
             await dbContext.SaveChangesAsync(CancellationToken.None);
             var categoryRepository = new Repository.CategoryRepository(dbContext);
-    
+
             await categoryRepository.Delete(exampleCategory, CancellationToken.None);
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
@@ -151,7 +151,7 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.Catego
             output.Total.Should().Be(exampleCategoriesList.Count);
             output.Items.Should().HaveCount(exampleCategoriesList.Count);
 
-            foreach(Category outputItem in output.Items)
+            foreach (Category outputItem in output.Items)
             {
                 var exampleItem = exampleCategoriesList.Find(category => category.Id == outputItem.Id);
 
@@ -162,8 +162,31 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.Catego
                 outputItem.CreatedAt.Should().Be(exampleItem.CreatedAt);
             }
 
-            
+
 
         }
+
+        [Fact(DisplayName = nameof(SearchReturnsEmptyWhenPersistenceIsEmpty))]
+        [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+        public async Task SearchReturnsEmptyWhenPersistenceIsEmpty()
+        {
+            CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+
+            var categoryRepository = new Repository.CategoryRepository(dbContext);
+
+            var searchInput = new SearchInput(1, 20, "", "", SearchOrder.Asc);
+            var output = await categoryRepository.Search(searchInput, CancellationToken.None);
+
+            output.Should().NotBeNull();
+            output.Items.Should().NotBeNull();
+            output.CurrentPage.Should().Be(searchInput.Page);
+            output.PerPage.Should().Be(searchInput.PerPage);
+            output.Total.Should().Be(0);
+            output.Items.Should().HaveCount(0);
+
+
+        }
+
+
     }
 }
