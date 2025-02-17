@@ -34,5 +34,7 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Application.UseCases.Category.Com
         public DomainEntity.Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
         public List<DomainEntity.Category> GetExampleCategoriesList(int length = 10)
         => Enumerable.Range(1, length).Select(_ => GetExampleCategory()).ToList();
+
+
     }
 }
