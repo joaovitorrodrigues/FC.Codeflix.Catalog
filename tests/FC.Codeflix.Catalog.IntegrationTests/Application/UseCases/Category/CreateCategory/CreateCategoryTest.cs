@@ -3,6 +3,7 @@ using FC.Codeflix.Catalog.Domain.Exceptions;
 using FC.Codeflix.Catalog.Infra.Data.EF;
 using FC.Codeflix.Catalog.Infra.Data.EF.Repositories;
 using FluentAssertions;
+using System.Data.Entity;
 using ApplicationUseCases = FC.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 
 namespace FC.Codeflix.Catalog.IntegrationTests.Application.UseCases.Category.CreateCategory
@@ -123,6 +124,9 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Application.UseCases.Category.Cre
             Func<Task> task = async () => await useCase.Handle(input, CancellationToken.None);
 
             await task.Should().ThrowAsync<EntityValidationException>().WithMessage(exceptionMessage);
+
+            var dbCategoriesList = _fixture.CreateDbContext(true).Categories.AsNoTracking().ToList();
+            dbCategoriesList.Should().HaveCount(0);
         }
     }
 }
