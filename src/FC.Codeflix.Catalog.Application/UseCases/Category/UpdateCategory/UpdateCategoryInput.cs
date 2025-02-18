@@ -10,7 +10,7 @@ namespace FC.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory
         public string Description { get; set; }
         public bool? IsActive { get; set; }
 
-        public UpdateCategoryInput(Guid id, string name, string? description = "", bool? isActive = null)
+        public UpdateCategoryInput(Guid id, string name, string? description = null, bool? isActive = null)
         {
             Id = id;
             Name = name;
