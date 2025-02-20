@@ -17,7 +17,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
         {
             var input = _fixture.GetExampleInput();
 
-            var output = await _fixture.Api.Post<CategoryModelOutput>(
+            var output = await _fixture.ApiClient.Post<CategoryModelOutput>(
                 "/categories",
                 input);
 
