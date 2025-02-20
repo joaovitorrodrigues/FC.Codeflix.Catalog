@@ -1,5 +1,6 @@
 ﻿using FC.Codeflix.Catalog.Application.UseCases.Category.Common;
 using FluentAssertions;
+using System.Net;
 
 namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
 {
@@ -17,9 +18,12 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
         {
             var input = _fixture.GetExampleInput();
 
-            var output = await _fixture.ApiClient.Post<CategoryModelOutput>(
+            var (response,output) = await _fixture.ApiClient.Post<CategoryModelOutput>(
                 "/categories",
                 input);
+
+            response.Should().NotBeNull();
+            response.Should().Be(HttpStatusCode.Created);
 
             output.Should().NotBeNull();
             output.Name.Should().Be(input.Name);
