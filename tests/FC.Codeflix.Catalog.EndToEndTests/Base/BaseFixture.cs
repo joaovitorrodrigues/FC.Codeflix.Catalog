@@ -2,7 +2,7 @@
 using FC.Codeflix.Catalog.Infra.Data.EF;
 using Microsoft.EntityFrameworkCore;
 
-namespace FC.Codeflix.Catalog.IntegrationTests.Base
+namespace FC.Codeflix.Catalog.EndToEndTests.Base
 {
     public abstract class BaseFixture
     {
@@ -14,12 +14,9 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Base
         public CodeflixCatalogDbContext CreateDbContext(bool preserveData = false)
         {
             var dbContext = new CodeflixCatalogDbContext(
-                    new DbContextOptionsBuilder<CodeflixCatalogDbContext>().UseInMemoryDatabase("integration-tests-db")
+                    new DbContextOptionsBuilder<CodeflixCatalogDbContext>().UseInMemoryDatabase("end2end-tests-db")
                     .Options
                 );
-
-            if (preserveData == false)
-                dbContext.Database.EnsureDeleted();
             return dbContext;
         }
     }
