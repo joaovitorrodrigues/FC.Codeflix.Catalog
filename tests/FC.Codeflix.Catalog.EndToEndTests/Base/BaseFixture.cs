@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using FC.Codeflix.Catalog.Api;
 using FC.Codeflix.Catalog.Infra.Data.EF;
 using Microsoft.EntityFrameworkCore;
 
