@@ -23,7 +23,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
                 input);
 
             response.Should().NotBeNull();
-            response.Should().Be(HttpStatusCode.Created);
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
 
             output.Should().NotBeNull();
             output.Name.Should().Be(input.Name);
