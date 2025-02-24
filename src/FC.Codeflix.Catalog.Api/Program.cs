@@ -10,7 +10,11 @@ namespace FC.Codeflix.Catalog.Api
 
             // Add services to the container.
 
-            builder.Services.AddAndConfigureControllers().AddUseCases();
+            builder.Services
+                .AddAndConfigureControllers()
+                .AddUseCases()
+                .AddAppConnections();
+
 
             var app = builder.Build();
             app.UseDocumentation();
