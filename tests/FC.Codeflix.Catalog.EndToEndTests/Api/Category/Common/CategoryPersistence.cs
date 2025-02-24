@@ -18,7 +18,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.Common
         public async Task InsertList(List<DomainEntity.Category> categories)
         {
             await _context.Categories.AddRangeAsync(categories);
-            await _context.AddRangeAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }
