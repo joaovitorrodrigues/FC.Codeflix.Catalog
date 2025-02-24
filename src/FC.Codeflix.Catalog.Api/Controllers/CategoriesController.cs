@@ -24,7 +24,7 @@ namespace FC.Codeflix.Catalog.Api.Controllers
         public async Task<IActionResult> Create([FromBody] CreateCategoryInput input, CancellationToken cancellationToken)
         {
             var output = await _mediator.Send(input, cancellationToken);
-            return CreatedAtAction(nameof(Create), new { output.Id }, output);
+            return CreatedAtAction(nameof(GetById), new { output.Id }, output);
         }
 
         [HttpGet("{id:Guid}")]

@@ -1,6 +1,7 @@
 ﻿using FC.Codeflix.Catalog.Application.UseCases.Category.Common;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.GetCategory
 {
@@ -35,6 +36,31 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.GetCategory
             output.Description.Should().Be(exampleCategory.Description);
             output.IsActive.Should().Be(exampleCategory.IsActive);
             output.CreatedAt.Should().NotBe(default);
+        }
+
+
+        [Fact(DisplayName = nameof(ThrowWhenNotExists))]
+        [Trait("EndToEnd/API", "Category/Get - Endpoints")]
+        public async Task ThrowWhenNotExists()
+        {
+
+            var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
+            await _fixture.Persistence.InsertList(exampleCategoriesList);
+            var randomGuid = Guid.NewGuid();
+
+
+            var (response, output) = await _fixture.ApiClient.Get<ProblemDetails>($"/categories/{randomGuid}");
+
+
+            response.Should().NotBeNull();
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+
+            output.Should().NotBeNull();
+            output.Title.Should().Be($"Not Found");
+            output.Detail.Should().Be($"Category '{randomGuid}' not found.");
+            output.Status.Should().Be(StatusCodes.Status404NotFound);
+            output.Type.Should().Be("NotFound");
+
         }
     }
 }
