@@ -44,11 +44,11 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
             dbCategory.CreatedAt.Should().NotBeSameDateAs(default);
         }
 
-        [Theory(DisplayName = nameof(ThrowWhenCantInstantiateAggregate))]
+        [Theory(DisplayName = nameof(ErrorWhenCantInstantiateAggregate))]
         [Trait("End2End/API", "Category/Create - Endpoints")]
         [MemberData(nameof(CreateCategoryApiTestDataGenerator.GetInvalidInputs),
             MemberType = typeof(CreateCategoryApiTestDataGenerator))]
-        public async Task ThrowWhenCantInstantiateAggregate(CreateCategoryInput input, string expectedDetail)
+        public async Task ErrorWhenCantInstantiateAggregate(CreateCategoryInput input, string expectedDetail)
         {
             var (response, output) = await _fixture.ApiClient.Post<ProblemDetails>(
                 "/categories",

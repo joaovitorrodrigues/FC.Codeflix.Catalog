@@ -39,9 +39,9 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.GetCategory
         }
 
 
-        [Fact(DisplayName = nameof(ThrowWhenNotExists))]
+        [Fact(DisplayName = nameof(ErrorWhenNotExists))]
         [Trait("EndToEnd/API", "Category/Get - Endpoints")]
-        public async Task ThrowWhenNotExists()
+        public async Task ErrorWhenNotExists()
         {
 
             var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
