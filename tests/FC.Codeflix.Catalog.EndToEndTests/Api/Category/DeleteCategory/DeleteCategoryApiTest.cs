@@ -1,5 +1,7 @@
 ﻿using FC.Codeflix.Catalog.Application.UseCases.Category.Common;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.DeleteCategory
 {
@@ -31,6 +33,28 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.DeleteCategory
 
             persistenceCategory.Should().BeNull();
             
+        }
+
+        [Fact(DisplayName = nameof(ErrorWhenNotFound))]
+        [Trait("EndToEnd/API", "Category/Delete - Endpoints")]
+        public async void ErrorWhenNotFound()
+        {
+            var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
+            await _fixture.Persistence.InsertList(exampleCategoriesList);
+            var exampleRandomGuid = Guid.NewGuid();
+
+
+            var (response, output) = await _fixture.ApiClient.Delete<ProblemDetails>($"/categories/{exampleRandomGuid}");
+
+
+            response.Should().NotBeNull();
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+            output.Should().NotBeNull();
+            output.Status.Should().Be(StatusCodes.Status404NotFound);
+            output.Title.Should().Be("Not Found");
+            output.Type.Should().Be("NotFound");
+            output.Detail.Should().Be($"Category '{exampleRandomGuid}' not found.");
+
         }
     }
 }
