@@ -2,8 +2,6 @@
 using FC.Codeflix.Catalog.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Net;
-
 namespace FC.Codeflix.Catalog.Api.Filters
 {
     public class ApiGlobalExceptionFilter : IExceptionFilter
