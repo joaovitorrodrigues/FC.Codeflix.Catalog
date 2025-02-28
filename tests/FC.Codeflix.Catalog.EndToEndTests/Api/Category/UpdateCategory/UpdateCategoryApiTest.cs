@@ -22,7 +22,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
             var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
             await _fixture.Persistence.InsertList(exampleCategoriesList);
             var exampleCategory = exampleCategoriesList[10];
-            var input = _fixture.getExampleInput(exampleCategory.Id);
+            var input = _fixture.GetExampleInput(exampleCategory.Id);
 
             var (response, output) = await _fixture.ApiClient.Put<CategoryModelOutput>(
                 $"/categories/{exampleCategory.Id}",
@@ -118,7 +118,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
             var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
             await _fixture.Persistence.InsertList(exampleCategoriesList);
             var randomGuid = Guid.NewGuid();
-            var input = _fixture.getExampleInput(randomGuid);
+            var input = _fixture.GetExampleInput(randomGuid);
 
             var (response, output) = await _fixture.ApiClient.Put<ProblemDetails>(
                 $"/categories/{randomGuid}",
@@ -133,6 +133,33 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
             output.Type.Should().Be("NotFound");
             output.Detail.Should().Be($"Category '{randomGuid}' not found.");
             output.Status.Should().Be(StatusCodes.Status404NotFound);
+
+        }
+
+        [Theory(DisplayName = nameof(ErrorWhenCantInstantiateAggregate))]
+        [Trait("End2End/API", "Category/Update - Endpoints")]
+        [MemberData(
+            nameof(UpdateCategoryApiTestDataGenerator.GetInvalidInputs),
+            MemberType = typeof(UpdateCategoryApiTestDataGenerator)
+        )]
+        public async void ErrorWhenCantInstantiateAggregate(UpdateCategoryInput input, string expectedDetail)
+        {
+            var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
+            await _fixture.Persistence.InsertList(exampleCategoriesList);
+            var exampleCategory = exampleCategoriesList[10];
+            input.Id = exampleCategory.Id;
+
+            var (response, output) = await _fixture.ApiClient.Put<ProblemDetails>(
+                $"/categories/{input.Id}",
+                input);
+
+            response.Should().NotBeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
+            output.Should().NotBeNull();
+            output.Title.Should().Be("One or more validation errors occurred");
+            output.Type.Should().Be("UnprocessableEntity");
+            output.Status.Should().Be(StatusCodes.Status422UnprocessableEntity);
+            output.Detail.Should().Be(expectedDetail);
 
         }
 

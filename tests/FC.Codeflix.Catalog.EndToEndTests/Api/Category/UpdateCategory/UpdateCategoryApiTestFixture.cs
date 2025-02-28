@@ -7,7 +7,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
     public class UpdateCategoryApiTestFixtureCollection : ICollectionFixture<UpdateCategoryApiTestFixture> { }
     public class UpdateCategoryApiTestFixture : CategoryBaseFixture
     {
-        public UpdateCategoryInput getExampleInput(Guid? id = null)
+        public UpdateCategoryInput GetExampleInput(Guid? id = null)
         => new UpdateCategoryInput(
                 id ?? Guid.NewGuid(),
                 GetValidCategoryName(),
