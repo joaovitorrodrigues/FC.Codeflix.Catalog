@@ -54,7 +54,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.Common
             var invalidInputTooLongName = Faker.Commerce.ProductName();
             while (invalidInputTooLongName.Length < 255)
             {
-                invalidInputTooLongName = $"{invalidInputTooLongName} {Faker.Commerce.ProductName}";
+                invalidInputTooLongName = $"{invalidInputTooLongName} {Faker.Commerce.ProductName()}";
             }
             return invalidInputTooLongName;
         }
@@ -64,7 +64,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.Common
             var invalidDescriptionTooLong = Faker.Commerce.ProductDescription();
             while (invalidDescriptionTooLong.Length < 10000)
             {
-                invalidDescriptionTooLong = $"{invalidDescriptionTooLong} {Faker.Commerce.ProductDescription}";
+                invalidDescriptionTooLong = $"{invalidDescriptionTooLong} {Faker.Commerce.ProductDescription()}";
             }
 
             return invalidDescriptionTooLong;
