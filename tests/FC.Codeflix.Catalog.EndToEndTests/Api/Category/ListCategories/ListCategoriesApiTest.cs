@@ -5,7 +5,7 @@ using FluentAssertions;
 namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
 {
     [Collection(nameof(ListCategoriesApiTestFixture))]
-    public class ListCategoriesApiTest
+    public class ListCategoriesApiTest : IDisposable
     {
         private readonly ListCategoriesApiTestFixture _fixture;
 
@@ -44,6 +44,8 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             }
 
         }
+        public void Dispose()
+        => _fixture.CleanPersistence();
     }
 }
  

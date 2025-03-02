@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.GetCategory
 {
     [Collection(nameof(GetCategoryApiTestFixture))]
-    public class GetCategoryApiTest
+    public class GetCategoryApiTest : IDisposable
     {
         private readonly GetCategoryApiTestFixture _fixture;
 
@@ -62,6 +62,9 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.GetCategory
             output.Type.Should().Be("NotFound");
 
         }
+
+        public void Dispose()
+        => _fixture.CleanPersistence();
     }
 }
 
