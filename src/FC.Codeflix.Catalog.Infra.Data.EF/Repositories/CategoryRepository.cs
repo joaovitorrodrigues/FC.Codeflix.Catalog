@@ -45,23 +45,27 @@ namespace FC.Codeflix.Catalog.Infra.Data.EF.Repositories
                 .ToListAsync();
 
 
-            return new(input.Page,input.PerPage, total, items);
+            return new(input.Page, input.PerPage, total, items);
         }
 
         public Task Update(Category aggregate, CancellationToken _)
         => Task.FromResult(_categories.Update(aggregate));
 
         private IQueryable<Category> AddOrderToQuery(IQueryable<Category> query, string orderProperty, SearchOrder order)
-        => (orderProperty.ToLower(), order) switch
         {
-            ("name", SearchOrder.Asc) => query.OrderBy(x => x.Name),
-            ("name", SearchOrder.Desc) => query.OrderByDescending(x => x.Name),
-            ("id", SearchOrder.Asc) => query.OrderBy(x => x.Id),
-            ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
-            ("createdat", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
-            ("createdat", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
-            _ =>  query.OrderBy(x => x.Name),
-        };
+           var ordered =  (orderProperty.ToLower(), order) switch
+            {
+                ("name", SearchOrder.Asc) => query.OrderBy(x => x.Name).ThenBy(x => x.CreatedAt),
+                ("name", SearchOrder.Desc) => query.OrderByDescending(x => x.Name).ThenBy(x => x.CreatedAt),
+                ("id", SearchOrder.Asc) => query.OrderBy(x => x.Id),
+                ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
+                ("createdat", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
+                ("createdat", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
+                _ => query.OrderBy(x => x.Name),
+            };
+
+            return ordered.ThenBy(x => x.CreatedAt);
+        }
 
     }
 }
