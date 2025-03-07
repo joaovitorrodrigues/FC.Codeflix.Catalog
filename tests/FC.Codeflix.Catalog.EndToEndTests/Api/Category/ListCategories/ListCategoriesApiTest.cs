@@ -5,6 +5,7 @@ using FC.Codeflix.Catalog.Infra.Data.EF;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using FC.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
+using FC.Codeflix.Catalog.EndToEndTests.Extensions.DateTime;
 
 namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
 {
@@ -46,7 +47,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
                 exampleItem.Name.Should().Be(outputItem.Name);
                 exampleItem.Description.Should().Be(outputItem.Description);
                 exampleItem.IsActive.Should().Be(outputItem.IsActive);
-                exampleItem.CreatedAt.Should().Be(outputItem.CreatedAt);
+                exampleItem.CreatedAt.TrimMilliseconds().Should().Be(outputItem.CreatedAt.TrimMilliseconds());
             }
 
         }
@@ -83,7 +84,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
                 exampleItem.Name.Should().Be(outputItem.Name);
                 exampleItem.Description.Should().Be(outputItem.Description);
                 exampleItem.IsActive.Should().Be(outputItem.IsActive);
-                exampleItem.CreatedAt.Should().Be(outputItem.CreatedAt);
+                exampleItem.CreatedAt.TrimMilliseconds().Should().Be(outputItem.CreatedAt.TrimMilliseconds());
             }
 
         }
@@ -144,7 +145,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
                 exampleItem.Name.Should().Be(outputItem.Name);
                 exampleItem.Description.Should().Be(outputItem.Description);
                 exampleItem.IsActive.Should().Be(outputItem.IsActive);
-                exampleItem.CreatedAt.Should().Be(outputItem.CreatedAt);
+                exampleItem.CreatedAt.TrimMilliseconds().Should().Be(outputItem.CreatedAt.TrimMilliseconds());
             }
         }
 
@@ -200,7 +201,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
                 exampleItem.Name.Should().Be(outputItem.Name);
                 exampleItem.Description.Should().Be(outputItem.Description);
                 exampleItem.IsActive.Should().Be(outputItem.IsActive);
-                exampleItem.CreatedAt.Should().Be(outputItem.CreatedAt);
+                exampleItem.CreatedAt.TrimMilliseconds().Should().Be(outputItem.CreatedAt.TrimMilliseconds());
             }
         }
 
@@ -249,7 +250,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
                 outputItem.Id.Should().Be(expectedItem.Id);
                 outputItem.Description.Should().Be(expectedItem.Description);
                 outputItem.IsActive.Should().Be(expectedItem.IsActive);
-                outputItem.CreatedAt.Should().Be(expectedItem.CreatedAt);
+                outputItem.CreatedAt.TrimMilliseconds().Should().Be(expectedItem.CreatedAt.TrimMilliseconds());
             }
         }
         public void Dispose()
