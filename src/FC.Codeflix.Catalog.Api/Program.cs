@@ -13,7 +13,7 @@ namespace FC.Codeflix.Catalog.Api
             builder.Services
                 .AddAndConfigureControllers()
                 .AddUseCases()
-                .AddAppConnections();
+                .AddAppConnections(builder.Configuration);
 
 
             var app = builder.Build();
