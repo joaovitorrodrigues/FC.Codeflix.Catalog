@@ -20,13 +20,13 @@ namespace FC.Codeflix.Catalog.IntegrationTests.Application.UseCases.Category.Lis
             var listClone = new List<EntityDomain.Category>(categoriesList);
             IOrderedEnumerable<EntityDomain.Category> orderedEnumerable = (orderBy, order) switch
             {
-                ("name", SearchOrder.Asc) => listClone.OrderBy(x => x.Name),
-                ("name", SearchOrder.Desc) => listClone.OrderByDescending(x => x.Name),
+                ("name", SearchOrder.Asc) => listClone.OrderBy(x => x.Name).ThenBy(x => x.Id),
+                ("name", SearchOrder.Desc) => listClone.OrderByDescending(x => x.Name).ThenByDescending(x => x.Id),
                 ("id", SearchOrder.Asc) => listClone.OrderBy(x => x.Id),
                 ("id", SearchOrder.Desc) => listClone.OrderByDescending(x => x.Id),
                 ("createdat", SearchOrder.Asc) => listClone.OrderBy(x => x.CreatedAt),
                 ("createdat", SearchOrder.Desc) => listClone.OrderByDescending(x => x.CreatedAt),
-                _ => listClone.OrderBy(x => x.Name),
+                _ => listClone.OrderBy(x => x.Name).ThenBy(x => x.Id),
             };
 
             return orderedEnumerable.ToList();
