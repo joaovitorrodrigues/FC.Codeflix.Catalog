@@ -1,9 +1,6 @@
 ﻿using FC.Codeflix.Catalog.Application.UseCases.Category.Common;
 using FC.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
-using FC.Codeflix.Catalog.Infra.Data.EF.Repositories;
-using FC.Codeflix.Catalog.Infra.Data.EF;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using FC.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using FC.Codeflix.Catalog.EndToEndTests.Extensions.DateTime;
 
