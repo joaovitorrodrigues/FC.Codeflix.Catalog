@@ -1,4 +1,5 @@
-﻿using FC.Codeflix.Catalog.Application.UseCases.Category.Common;
+﻿using FC.Codeflix.Catalog.Api.ApiModels.Category;
+using FC.Codeflix.Catalog.Application.UseCases.Category.Common;
 using FC.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -7,7 +8,8 @@ using System.Net;
 
 namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
 {
-    [Collection(nameof(UpdateCategoryApiTestFixture))]
+
+        [Collection(nameof(UpdateCategoryApiTestFixture))]
     public class UpdateCategoryApiTest : IDisposable
     {
         private readonly UpdateCategoryApiTestFixture _fixture;
@@ -22,7 +24,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
             var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
             await _fixture.Persistence.InsertList(exampleCategoriesList);
             var exampleCategory = exampleCategoriesList[10];
-            var input = _fixture.GetExampleInput(exampleCategory.Id);
+            var input = _fixture.GetExampleInput();
 
             var (response, output) = await _fixture.ApiClient.Put<CategoryModelOutput>(
                 $"/categories/{exampleCategory.Id}",
@@ -54,7 +56,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
             var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
             await _fixture.Persistence.InsertList(exampleCategoriesList);
             var exampleCategory = exampleCategoriesList[10];
-            var input = new UpdateCategoryInput(exampleCategory.Id, _fixture.GetValidCategoryName());
+            var input = new UpdateCategoryApiInput( _fixture.GetValidCategoryName());
 
             var (response, output) = await _fixture.ApiClient.Put<CategoryModelOutput>(
                 $"/categories/{exampleCategory.Id}",
@@ -86,7 +88,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
             var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
             await _fixture.Persistence.InsertList(exampleCategoriesList);
             var exampleCategory = exampleCategoriesList[10];
-            var input = new UpdateCategoryInput(exampleCategory.Id, _fixture.GetValidCategoryName(), _fixture.GetValidCategoryDescription());
+            var input = new UpdateCategoryApiInput( _fixture.GetValidCategoryName(), _fixture.GetValidCategoryDescription());
 
             var (response, output) = await _fixture.ApiClient.Put<CategoryModelOutput>(
                 $"/categories/{exampleCategory.Id}",
@@ -118,7 +120,7 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
             var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
             await _fixture.Persistence.InsertList(exampleCategoriesList);
             var randomGuid = Guid.NewGuid();
-            var input = _fixture.GetExampleInput(randomGuid);
+            var input = _fixture.GetExampleInput();
 
             var (response, output) = await _fixture.ApiClient.Put<ProblemDetails>(
                 $"/categories/{randomGuid}",
@@ -142,15 +144,14 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
             nameof(UpdateCategoryApiTestDataGenerator.GetInvalidInputs),
             MemberType = typeof(UpdateCategoryApiTestDataGenerator)
         )]
-        public async void ErrorWhenCantInstantiateAggregate(UpdateCategoryInput input, string expectedDetail)
+        public async void ErrorWhenCantInstantiateAggregate(UpdateCategoryApiInput input, string expectedDetail)
         {
             var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
             await _fixture.Persistence.InsertList(exampleCategoriesList);
             var exampleCategory = exampleCategoriesList[10];
-            input.Id = exampleCategory.Id;
 
             var (response, output) = await _fixture.ApiClient.Put<ProblemDetails>(
-                $"/categories/{input.Id}",
+                $"/categories/{exampleCategory.Id}",
                 input);
 
             response.Should().NotBeNull();

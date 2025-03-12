@@ -1,4 +1,5 @@
-﻿using FC.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
+﻿using FC.Codeflix.Catalog.Api.ApiModels.Category;
+using FC.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 using FC.Codeflix.Catalog.EndToEndTests.Api.Category.Common;
 
 namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
@@ -7,9 +8,8 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
     public class UpdateCategoryApiTestFixtureCollection : ICollectionFixture<UpdateCategoryApiTestFixture> { }
     public class UpdateCategoryApiTestFixture : CategoryBaseFixture
     {
-        public UpdateCategoryInput GetExampleInput(Guid? id = null)
-        => new UpdateCategoryInput(
-                id ?? Guid.NewGuid(),
+        public UpdateCategoryApiInput GetExampleInput()
+        => new UpdateCategoryApiInput(
                 GetValidCategoryName(),
                 GetValidCategoryDescription(),
                 GetRandomBoolean());
