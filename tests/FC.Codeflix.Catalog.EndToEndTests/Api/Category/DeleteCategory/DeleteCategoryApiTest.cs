@@ -1,5 +1,4 @@
-﻿using FC.Codeflix.Catalog.Application.UseCases.Category.Common;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
