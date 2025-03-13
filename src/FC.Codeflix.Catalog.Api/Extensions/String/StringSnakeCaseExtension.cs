@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json.Serialization;
 
-namespace FC.Codeflix.Catalog.EndToEndTests.Extensions.String
+namespace FC.Codeflix.Catalog.Api.Extensions.String
 {
-    public static class SnakeCaseExtension
+    public static class StringSnakeCaseExtension
     {
         private static readonly NamingStrategy _snakeCaseNamingStrategy = new SnakeCaseNamingStrategy();
 
@@ -10,6 +10,6 @@ namespace FC.Codeflix.Catalog.EndToEndTests.Extensions.String
         {
             ArgumentNullException.ThrowIfNull(stringToConvert, nameof(stringToConvert));
             return _snakeCaseNamingStrategy.GetPropertyName(stringToConvert, false);
-        } 
+        }
     }
 }

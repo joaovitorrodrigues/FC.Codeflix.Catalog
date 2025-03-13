@@ -1,4 +1,6 @@
-﻿using FC.Codeflix.Catalog.Api.Filters;
+﻿using FC.Codeflix.Catalog.Api.Configurations.Policies;
+using FC.Codeflix.Catalog.Api.Filters;
+using Microsoft.AspNetCore.Http.Json;
 
 namespace FC.Codeflix.Catalog.Api.Configurations
 {
@@ -6,7 +8,12 @@ namespace FC.Codeflix.Catalog.Api.Configurations
     {
         public static IServiceCollection AddAndConfigureControllers(this IServiceCollection services)
         {
-            services.AddControllers(options => options.Filters.Add(typeof(ApiGlobalExceptionFilter)));
+            services.AddControllers(options => options.Filters.Add(typeof(ApiGlobalExceptionFilter)))
+                    .AddJsonOptions(JsonOptions =>
+                    {
+                        JsonOptions.JsonSerializerOptions.PropertyNamingPolicy = new JsonSnakeCasePolicy();
+                        JsonOptions.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+                    });
             services.AddDocumentaion();
 
             return services;
