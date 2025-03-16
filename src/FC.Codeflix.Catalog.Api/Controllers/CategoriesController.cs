@@ -80,7 +80,8 @@ namespace FC.Codeflix.Catalog.Api.Controllers
             if (dir is not null) input.Dir = dir.Value;
 
             var output = await _mediator.Send(input, cancellationToken);
-            return Ok(output);
+            var response = new ApiResponseList<CategoryModelOutput>(output);
+            return Ok(response);
         }
     }
 }
