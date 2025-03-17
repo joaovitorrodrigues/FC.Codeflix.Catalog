@@ -16,7 +16,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Genre
         [Trait("Domain", "Genre - Aggregates")]
         public void Instantiate()
         {
-            var genreName = "Horror";
+            var genreName = _fixture.GetValidName();
             var genre = new EntityDomain.Genre(genreName);
 
             genre.Should().NotBeNull();
@@ -32,7 +32,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Genre
         [InlineData(false)]
         public void InstantiateWithIsActive(bool isActive)
         {
-            var genreName = "Horror";
+            var genreName = _fixture.GetValidName();
             var genre = new EntityDomain.Genre(genreName, isActive);
 
             genre.Should().NotBeNull();
@@ -41,5 +41,38 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Genre
             genre.CreatedAt.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
         }
 
+        [Theory(DisplayName = nameof(Activate))]
+        [Trait("Domain", "Genre - Aggregates")]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Activate(bool isActive)
+        {
+            var genreName = _fixture.GetValidName();
+            var genre = new EntityDomain.Genre(genreName, isActive);
+
+            genre.Activate();
+
+            genre.Should().NotBeNull();
+            genre.Name.Should().Be(genreName);
+            genre.IsActive.Should().BeTrue();
+            genre.CreatedAt.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+        }
+
+        [Theory(DisplayName = nameof(Deactivate))]
+        [Trait("Domain", "Genre - Aggregates")]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Deactivate(bool isActive)
+        {
+            var genreName = _fixture.GetValidName();
+            var genre = new EntityDomain.Genre(genreName, isActive);
+
+            genre.Deactivate();
+
+            genre.Should().NotBeNull();
+            genre.Name.Should().Be(genreName);
+            genre.IsActive.Should().BeFalse();
+            genre.CreatedAt.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+        }
     }
 }
