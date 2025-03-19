@@ -47,13 +47,11 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Genre
         [InlineData(false)]
         public void Activate(bool isActive)
         {
-            var genreName = _fixture.GetValidName();
-            var genre = new EntityDomain.Genre(genreName, isActive);
+            var genre = _fixture.GetValidGenre(isActive);
 
             genre.Activate();
 
             genre.Should().NotBeNull();
-            genre.Name.Should().Be(genreName);
             genre.IsActive.Should().BeTrue();
             genre.CreatedAt.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
         }
@@ -64,15 +62,30 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Genre
         [InlineData(false)]
         public void Deactivate(bool isActive)
         {
-            var genreName = _fixture.GetValidName();
-            var genre = new EntityDomain.Genre(genreName, isActive);
+            var genre = _fixture.GetValidGenre(isActive);
 
             genre.Deactivate();
 
             genre.Should().NotBeNull();
-            genre.Name.Should().Be(genreName);
             genre.IsActive.Should().BeFalse();
             genre.CreatedAt.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
         }
+
+        [Fact(DisplayName =nameof(Update))]
+        [Trait("Domain", "Genre - Aggregates")]
+        public void Update()
+        {
+            var newName = _fixture.GetValidName();
+            var genre = _fixture.GetValidGenre();
+            var oldIsActive = genre.IsActive;
+
+            genre.Update(newName);
+
+            genre.Should().NotBeNull();
+            genre.Name.Should().Be(newName);
+            genre.IsActive.Should().Be(oldIsActive);
+            genre.CreatedAt.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+        }
+
     }
 }

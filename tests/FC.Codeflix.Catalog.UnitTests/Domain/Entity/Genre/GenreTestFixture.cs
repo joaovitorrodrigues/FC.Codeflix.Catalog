@@ -10,7 +10,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Genre
         public string GetValidName()
             => Faker.Commerce.Categories(1)[0];
 
-        public DomainEntity.Genre GetValidGenre()
-            => new DomainEntity.Genre(GetValidName());
+        public DomainEntity.Genre GetValidGenre(bool isActive = true)
+            => new DomainEntity.Genre(GetValidName(), isActive);
     }
 }
