@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using FC.Codeflix.Catalog.Domain.Exceptions;
+using FluentAssertions;
 using EntityDomain = FC.Codeflix.Catalog.Domain.Entity;
 namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Genre
 {
@@ -85,6 +86,35 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Genre
             genre.Name.Should().Be(newName);
             genre.IsActive.Should().Be(oldIsActive);
             genre.CreatedAt.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+        }
+
+        [Theory(DisplayName = nameof(InstantiateThrowWhenNameEmpty))]
+        [Trait("Domain", "Genre - Aggregates")]
+        [InlineData("")]
+        [InlineData("  ")]
+        [InlineData(null)]
+        public void InstantiateThrowWhenNameEmpty(string? name)
+        {
+            var action = () =>  new EntityDomain.Genre(name!);
+
+            action.Should().Throw<EntityValidationException>().WithMessage("Name should not be null or empty");
+                       
+        }
+
+        [Theory(DisplayName = nameof(UpdateThrowWhenNameIsEmpty))]
+        [Trait("Domain", "Genre - Aggregates")]
+        [InlineData("")]
+        [InlineData("  ")]
+        [InlineData(null)]
+        public void UpdateThrowWhenNameIsEmpty(string? name)
+        {
+            var genre = _fixture.GetValidGenre();
+            var oldIsActive = genre.IsActive;
+
+            var action = () => genre.Update(name);
+
+            action.Should().Throw<EntityValidationException>().WithMessage("Name should not be null or empty");
+            
         }
 
     }
