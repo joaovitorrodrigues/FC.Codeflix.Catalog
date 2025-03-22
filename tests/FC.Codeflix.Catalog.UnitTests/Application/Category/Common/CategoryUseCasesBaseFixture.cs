@@ -29,9 +29,7 @@ namespace FC.Codeflix.Catalog.UnitTests.Application.Category.Common
                 categoryDescription = categoryDescription[..10000];
 
             return categoryDescription;
-        }
-
-        public bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
+        }        
 
         public Mock<ICategoryRepository> GetRepositoryMock() => new();
         public Mock<IUnitOfWork> GetUnitOfWorkMock() => new(); 
