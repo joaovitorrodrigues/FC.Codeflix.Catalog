@@ -146,5 +146,22 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Genre
 
         }
 
+
+        [Fact(DisplayName = nameof(RemoveCategory))]
+        [Trait("Domain", "Genre - Aggregates")]
+        public void RemoveCategory()
+        {
+            int quantityCategoriesId = 5;
+            var exampleGuid = Guid.NewGuid();
+            var genre = _fixture.GetValidGenre(categoriesIdsList: _fixture.GetCategoriesId(quantityCategoriesId));   
+            genre.AddCategory(exampleGuid);
+            genre.RemoveCategory(exampleGuid);
+
+            genre.Categories.Should().HaveCount(quantityCategoriesId);
+            genre.Categories.Should().NotContain(exampleGuid);
+
+        }
+
+
     }
 }
