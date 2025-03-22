@@ -162,6 +162,20 @@ namespace FC.Codeflix.Catalog.UnitTests.Domain.Entity.Genre
 
         }
 
+        [Fact(DisplayName = nameof(RemoveAllCategories))]
+        [Trait("Domain", "Genre - Aggregates")]
+        public void RemoveAllCategories()
+        {
+            int quantityCategoriesId = 5;
+            var genre = _fixture.GetValidGenre(categoriesIdsList: _fixture.GetCategoriesId(quantityCategoriesId));
+
+            genre.RemoveAllCategories();
+
+            genre.Categories.Should().HaveCount(0);
+
+
+        }
+
 
     }
 }

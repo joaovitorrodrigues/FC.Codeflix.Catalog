@@ -46,6 +46,13 @@ namespace FC.Codeflix.Catalog.Domain.Entity
             _categories.Remove(categoryId);
             Validate();
         }
+
+        public void RemoveAllCategories()
+        {
+            _categories.Clear();
+            Validate();
+        }
+
         private void Validate()
             => DomainValidation.NotNullOrEmpty(Name, nameof(Name));
 
