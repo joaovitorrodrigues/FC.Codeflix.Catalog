@@ -5,15 +5,17 @@ namespace FC.Codeflix.Catalog.Domain.Entity
     public class Genre : AggregateRoot
     {
 
-        public string Name { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public bool IsActive { get; set; }
+        public string Name { get; private set; }
+        public DateTime CreatedAt { get; private set; }
+        public bool IsActive { get; private set; }
+        public IReadOnlyList<Guid> Categories => _categories;
+        private List<Guid> _categories; 
         public Genre(string name, bool isActive = true)
         {
             Name = name;
             IsActive = isActive;
             CreatedAt = DateTime.Now;
-
+            _categories = new List<Guid>();
             Validate();
         }
         public void Activate()
@@ -30,6 +32,12 @@ namespace FC.Codeflix.Catalog.Domain.Entity
         public void Update(string name)
         {
             Name = name;
+            Validate();
+        }
+
+        public void AddCategory(Guid categoryId)
+        {
+            _categories.Add(categoryId);
             Validate();
         }
 
